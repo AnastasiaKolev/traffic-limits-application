@@ -2,8 +2,6 @@ package ru.kolevatykh.config;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import org.apache.hadoop.fs.LocalFileSystem;
-import org.apache.hadoop.hdfs.DistributedFileSystem;
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.streaming.Durations;
@@ -28,7 +26,7 @@ public class SparkConfig {
     }
 
     public JavaStreamingContext javaStreamingContext() {
-        return new JavaStreamingContext(javaSparkContext(), Durations.seconds(Long.valueOf(duration)));
+        return new JavaStreamingContext(javaSparkContext(), Durations.minutes(Long.valueOf(duration)));
     }
 
 }

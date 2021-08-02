@@ -2,17 +2,22 @@
 
 This application is for capturing traffic in 5 minutes. It sends messages about exceeding the limits for traffic to Kafka.
 
-How to run the application
+### How to run the application by steps:
 
-Setting up the system variables:
-1. Create JAVA_HOME: C:\Program Files\Java\jdk-11 and add to PATH: %JAVA_HOME%\bin;
-2. Create M2_HOME: C:\Program Files\Maven\apache-maven-3.8.1 and add it to PATH: %M2_HOME%\bin;
-3. Create SPARK_HOME: C:\spark-3.1.2-bin-hadoop3.2 and add to PATH: %SPARK_HOME%\bin;
-4. Create SPARK_LOCAL_IP=localhost
-5. Create variable HADOOP_HOME: C:\Program Files\Hadoop\hadoop-3.0.0 and add to PATH: %HADOOP_HOME%\bin;
+#### 1. Setting up the system variables:
+* Create JAVA_HOME: C:\Program Files\Java\jdk-11 and add to PATH: %JAVA_HOME%\bin;
+* Create M2_HOME: C:\Program Files\Maven\apache-maven-3.8.1 and add it to PATH: %M2_HOME%\bin;
+* Create SPARK_HOME: C:\spark-3.1.2-bin-hadoop3.2 and add to PATH: %SPARK_HOME%\bin;
+* Create SPARK_LOCAL_IP=localhost
+* Create variable HADOOP_HOME: C:\Program Files\Hadoop\hadoop-3.0.0 and add to PATH: %HADOOP_HOME%\bin;
    The most important part of the Hadoop PATH is winutils.exe, check the file in the \bin
 
-Setting up the database:
+#### 2. Running the Docker:
+   ```
+   docker-compose up -d
+   ```
+
+#### 3. Setting up the database:
 1. Create schema with command:
    ```
    create schema traffic_limits;
@@ -26,19 +31,19 @@ Setting up the database:
    insert into traffic_limits.limits_per_hour (id, effective_date, limit_name, limit_value) 
    values (gen_random_uuid(), now() at time zone '-3:00', 'min', 1234);
    ```
-3. Check the database
+3. Check the database rows
    ```
    select * from traffic_limits.limits_per_hour;
    ```
 
-Run the application from IDE:
+#### 4. Run the application from IDE:
    ```
    mvn clean install
    
    Run the application with optional args[0] parameter which stands for IP address
    ```
 
-Run the application using terminal:
+#### 4.1 Run the application using terminal:
    ```
    mvn clean install assembly:single
    

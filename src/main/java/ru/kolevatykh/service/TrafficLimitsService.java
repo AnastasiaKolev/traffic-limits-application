@@ -5,8 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.function.Function2;
 import org.apache.spark.api.java.function.VoidFunction;
-import org.apache.spark.api.java.function.VoidFunction2;
-import org.apache.spark.streaming.Time;
 import org.apache.spark.streaming.api.java.JavaDStream;
 import org.apache.spark.streaming.api.java.JavaStreamingContext;
 import ru.kolevatykh.config.KafkaConfig;
@@ -43,7 +41,6 @@ public class TrafficLimitsService {
                 public void call(JavaRDD<Integer> packet) {
                     if (!packet.isEmpty()) {
                         Integer packetLength = packet.first();
-                        log.warn(">>>>>>>>>>>>>>>>>>>>>>> NEW: " + packetLength);
                         if (packetLength < min || packetLength > max) {
                             String msg = "The packets length captured in 5 minutes: " + packetLength
                                     + " exceeds the limits min = " + min + " and max = " + max;
@@ -65,7 +62,6 @@ public class TrafficLimitsService {
         min = databaseService.findLimitByNameAndDate("min");
         log.info("Limits are updated: max = {}, min = {}", max, min);
     }
-
 
     public void sendAlert(String message) {
         KafkaConfig.sendMessage(message);

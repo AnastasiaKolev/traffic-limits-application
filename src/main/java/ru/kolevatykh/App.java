@@ -8,13 +8,12 @@ import ru.kolevatykh.entity.LimitsPerHour;
 import ru.kolevatykh.service.DatabaseService;
 import ru.kolevatykh.service.TrafficLimitsService;
 
-import java.io.IOException;
 import java.time.OffsetDateTime;
 
 @Slf4j
 public class App {
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
 
         DatabaseService db = new DatabaseService();
         try {

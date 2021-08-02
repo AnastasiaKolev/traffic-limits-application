@@ -17,7 +17,6 @@ public class PcapConfig {
     private static final int readTimeout = 500;
 
     public static PcapHandle pcapHandle(Integer deviceId) {
-        // Открываем узел и запускаем управляющий модуль handle
         PcapHandle handle = null;
         try {
             handle = getNetworkDevices().get(deviceId).openLive(snapshotLength, PcapNetworkInterface.PromiscuousMode.PROMISCUOUS, readTimeout);
