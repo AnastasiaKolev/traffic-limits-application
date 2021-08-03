@@ -9,22 +9,16 @@ import ru.kolevatykh.service.DatabaseService;
 import ru.kolevatykh.service.TrafficLimitsService;
 
 import java.time.OffsetDateTime;
+import java.util.List;
 
 @Slf4j
 public class App {
 
     public static void main(String[] args) {
 
-        DatabaseService db = new DatabaseService();
-        try {
-            db.persist(new LimitsPerHour("min", 10246, OffsetDateTime.now()));
-            db.persist(new LimitsPerHour("max", 1073741824, OffsetDateTime.now()));
-        } catch (Exception e) {
-            log.error(e.getMessage());
-        }
+        initDb();
 
-        // Create new kafka topic if it doesn't exist
-        KafkaConfig.createTopic();
+        KafkaConfig.createTopic("alerts");
 
         // Schedule a job for limits updating
         SchedulerConfig.scheduleLimitUpdate();
@@ -39,6 +33,22 @@ public class App {
             trafficLimitsService.captureTraffic();
         } catch (Exception e) {
             log.debug(e.getMessage());
+        }
+    }
+
+    /**
+     * Persist traffic limits values in DB, if table is empty
+     */
+    private static void initDb() {
+        DatabaseService db = new DatabaseService();
+        List<LimitsPerHour> limits = db.findAll();
+        try {
+            if (limits.isEmpty()) {
+                db.persist(new LimitsPerHour("min", 1024, OffsetDateTime.now()));
+                db.persist(new LimitsPerHour("max", 1073741824, OffsetDateTime.now()));
+            }
+        } catch (Exception e) {
+            log.error(e.getMessage());
         }
     }
 }

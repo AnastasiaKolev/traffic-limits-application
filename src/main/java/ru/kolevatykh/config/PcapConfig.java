@@ -15,11 +15,13 @@ public class PcapConfig {
 
     private static final int snapshotLength = 65536;
     private static final int readTimeout = 500;
+    private static final List<PcapNetworkInterface> pcapList = getNetworkDevices();
 
     public static PcapHandle pcapHandle(Integer deviceId) {
         PcapHandle handle = null;
         try {
-            handle = getNetworkDevices().get(deviceId).openLive(snapshotLength, PcapNetworkInterface.PromiscuousMode.PROMISCUOUS, readTimeout);
+            handle = pcapList.get(deviceId)
+                    .openLive(snapshotLength, PcapNetworkInterface.PromiscuousMode.PROMISCUOUS, readTimeout);
         } catch (PcapNativeException e) {
             log.debug(e.getMessage());
         }

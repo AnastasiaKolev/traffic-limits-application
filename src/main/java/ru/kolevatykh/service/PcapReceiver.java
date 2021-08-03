@@ -35,6 +35,9 @@ public class PcapReceiver extends Receiver<Integer> {
 
     }
 
+    /**
+     * Capturing network traffic for a given device id
+     */
     public void handlePacket() throws Exception {
         PcapHandle handle = PcapConfig.pcapHandle(deviceId);
 

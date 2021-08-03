@@ -5,6 +5,7 @@ import ru.kolevatykh.entity.LimitsPerHour;
 import ru.kolevatykh.util.HibernateUtil;
 
 import javax.persistence.EntityManager;
+import java.util.List;
 
 @Data
 public class DatabaseService {
@@ -33,5 +34,12 @@ public class DatabaseService {
                 .setParameter("name", name)
                 .getResultList()
                 .get(0);
+    }
+
+    public List<LimitsPerHour> findAll() {
+        entityManager = HibernateUtil.getEntityManager();
+        return entityManager
+                .createQuery("SELECT t FROM limits_per_hour t", LimitsPerHour.class)
+                .getResultList();
     }
 }

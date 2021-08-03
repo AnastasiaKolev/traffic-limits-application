@@ -21,8 +21,10 @@ public class TrafficLimitsService {
 
     private static DatabaseService databaseService;
 
+    /**
+     * Calculate network traffic specified by port IP address in 5 minutes intervals
+     */
     public void captureTraffic() throws Exception {
-        // Create a local StreamingContext with * working threads and batch interval of 5 minutes
         JavaStreamingContext javaStreamingContext = new SparkConfig().javaStreamingContext();
 
         limitsUpdate();
@@ -48,7 +50,6 @@ public class TrafficLimitsService {
                         }
                     }
                 }
-
             });
             packets.print();
         }
@@ -56,6 +57,9 @@ public class TrafficLimitsService {
         javaStreamingContext.awaitTermination();
     }
 
+    /**
+     * Updates traffic limits values from DB
+     */
     public static void limitsUpdate() {
         databaseService = new DatabaseService();
         max = databaseService.findLimitByNameAndDate("max");
@@ -63,6 +67,9 @@ public class TrafficLimitsService {
         log.info("Limits are updated: max = {}, min = {}", max, min);
     }
 
+    /**
+     * Sends message to Kafka topic
+     */
     public void sendAlert(String message) {
         KafkaConfig.sendMessage(message);
     }

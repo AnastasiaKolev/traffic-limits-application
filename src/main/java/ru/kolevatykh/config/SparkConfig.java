@@ -25,6 +25,10 @@ public class SparkConfig {
         return new JavaSparkContext(sparkConf());
     }
 
+    /**
+     * Create a local StreamingContext with * working threads and batch interval of 5 minutes
+     * @return JavaStreamingContext
+     */
     public JavaStreamingContext javaStreamingContext() {
         return new JavaStreamingContext(javaSparkContext(), Durations.minutes(Long.valueOf(duration)));
     }
